@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Navigation from "../Navigation";
 import IngredientCard from "./IngredientCard";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import useWindowSize from "../../hooks/useWindowSize";
 import ingredients from "../../data/all_data.json";
 import IngredientModal from "./IngredientModal";
-import RecipeDetails from "../details/RecipeDetails";
+import { useRecipe } from "../../contexts/RecipeContext";
+import { useHistory } from "react-router-dom";
 
 export default function CreateRecipe(props) {
   console.log(props.location.state);
@@ -14,6 +15,8 @@ export default function CreateRecipe(props) {
   const [filter, setFilter] = useState("Filter by Group...");
   const [details, setDetails] = useState(null);
   const [data, setData] = useState({});
+  const { ingredientsList } = useRecipe();
+  let history = useHistory();
 
   function getSentiment(object, type) {
     var count = 0;
@@ -87,13 +90,22 @@ export default function CreateRecipe(props) {
         <IngredientModal setDetails={setDetails} details={data[details]} />
       )}
       <Navigation />
-      <RecipeDetails />
       <br />
       <Container>
         <Row>
           <Col lg={12} style={{ paddingBottom: "5px", paddingTop: "20px" }}>
             <h6 style={{ fontSize: width === "lg" ? "60px" : "80px" }}>
               🍽 Add Ingredients
+              <span style={{ float: "right" }}>
+                <Button
+                  variant="outline-dark"
+                  disabled={ingredientsList.length === 0}
+                  style={{ fontSize: "25px" }}
+                  onClick={() => history.push("/overview")}
+                >
+                  Next Step ￫
+                </Button>
+              </span>
             </h6>
             <h3 style={{ color: "#7C7C7D" }}>
               Ingredients are scored based on nutritional and sustainability

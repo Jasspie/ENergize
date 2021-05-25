@@ -6,7 +6,7 @@ import useWindowSize from "../../hooks/useWindowSize";
 import { useRecipe } from "../../contexts/RecipeContext";
 
 export default function IngredientCard({ ingredient, setDetails, details }) {
-  const { ingredients, setIngredients } = useRecipe();
+  const { ingredientsList, setIngredientsList } = useRecipe();
   const width = useWindowSize();
   const name = ingredient["name"];
   const category = ingredient["categories"];
@@ -75,7 +75,7 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
             >
               <ViewList /> View Details
             </Button>
-            {ingredients.includes(ingredient) ? (
+            {ingredientsList.includes(ingredient) ? (
               <Button
                 variant="outline-danger"
                 style={{
@@ -84,8 +84,8 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
                   padding: width === "lg" ? "10px" : "40px",
                 }}
                 onClick={() => {
-                  setIngredients(
-                    ingredients.filter((item) => item !== ingredient)
+                  setIngredientsList(
+                    ingredientsList.filter((item) => item !== ingredient)
                   );
                 }}
               >
@@ -100,7 +100,7 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
                   padding: width === "lg" ? "10px" : "40px",
                 }}
                 onClick={() => {
-                  setIngredients((list) => [...list, ingredient]);
+                  setIngredientsList((list) => [...list, ingredient]);
                 }}
               >
                 <Cart2 /> Add

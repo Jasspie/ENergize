@@ -7,24 +7,26 @@ export function useRecipe() {
 }
 
 export function RecipeProvider({ children }) {
-  const [ingredients, setIngredients] = useState([]);
+  const [ingredientsList, setIngredientsList] = useState([]);
   const [image, setImage] = useState(null);
-  const [title, setTitle] = useState(null);
-  const [details, setDetails] = useState(null);
+  const [title, setTitle] = useState("");
+  const [details, setDetails] = useState("");
 
   function reset() {
-    setIngredients([]);
+    setIngredientsList([]);
     setImage(null);
-    setTitle(null);
-    setDetails(null);
+    setTitle("");
+    setDetails("");
   }
   const value = {
-    ingredients,
+    ingredientsList,
     image,
     title,
     details,
     reset,
-    setIngredients,
+    setIngredientsList,
+    setDetails,
+    setTitle,
   };
 
   return (
