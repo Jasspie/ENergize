@@ -7,13 +7,13 @@ import ingredients from "../../data/all_data.json";
 import IngredientModal from "./IngredientModal";
 import RecipeDetails from "../details/RecipeDetails";
 
-export default function CreateRecipe() {
+export default function CreateRecipe(props) {
+  console.log(props.location.state);
   const width = useWindowSize();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("Filter by Group...");
   const [details, setDetails] = useState(null);
   const [data, setData] = useState({});
-  const [ingredientList, setIngredientList] = useState([]);
 
   function getSentiment(object, type) {
     var count = 0;
@@ -72,8 +72,6 @@ export default function CreateRecipe() {
                 ingredient={data[ingredient]}
                 setDetails={setDetails}
                 details={details}
-                ingredientList={ingredientList}
-                setIngredientList={setIngredientList}
               />
             </Col>
           );

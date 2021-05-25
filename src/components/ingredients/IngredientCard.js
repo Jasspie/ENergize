@@ -3,14 +3,10 @@ import { Button, Card, Row, Col } from "react-bootstrap";
 import { Cart2, ViewList } from "react-bootstrap-icons";
 import Pie from "../Pie";
 import useWindowSize from "../../hooks/useWindowSize";
+import { useRecipe } from "../../contexts/RecipeContext";
 
-export default function IngredientCard({
-  ingredient,
-  setDetails,
-  details,
-  ingredientList,
-  setIngredientList,
-}) {
+export default function IngredientCard({ ingredient, setDetails, details }) {
+  const { ingredients, setIngredients } = useRecipe();
   const width = useWindowSize();
   const name = ingredient["name"];
   const category = ingredient["categories"];
@@ -79,7 +75,7 @@ export default function IngredientCard({
             >
               <ViewList /> View Details
             </Button>
-            {ingredientList.includes(ingredient) ? (
+            {ingredients.includes(ingredient) ? (
               <Button
                 variant="outline-danger"
                 style={{
@@ -88,8 +84,8 @@ export default function IngredientCard({
                   padding: width === "lg" ? "10px" : "40px",
                 }}
                 onClick={() => {
-                  setIngredientList(
-                    ingredientList.filter((item) => item !== ingredient)
+                  setIngredients(
+                    ingredients.filter((item) => item !== ingredient)
                   );
                 }}
               >
@@ -104,7 +100,7 @@ export default function IngredientCard({
                   padding: width === "lg" ? "10px" : "40px",
                 }}
                 onClick={() => {
-                  setIngredientList((list) => [...list, ingredient]);
+                  setIngredients((list) => [...list, ingredient]);
                 }}
               >
                 <Cart2 /> Add

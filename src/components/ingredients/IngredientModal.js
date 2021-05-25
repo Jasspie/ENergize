@@ -11,8 +11,6 @@ export default function IngredientModal({ setDetails, details }) {
     }
   }
 
-  console.log(details);
-
   function getColour(number) {
     if (number > 90) return "#11b31e";
     else if (number > 84) return "#57a000";

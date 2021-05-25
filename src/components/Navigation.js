@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Button, Alert, Navbar, Nav } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
+import { useRecipe } from "../contexts/RecipeContext";
 import { Link, useHistory } from "react-router-dom";
 
 export default function Navigation() {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
+  const { ingredients } = useRecipe();
   const history = useHistory();
 
   async function handleLogout() {
@@ -24,7 +26,10 @@ export default function Navigation() {
         ENergize
       </Navbar.Brand>
       <Nav>
-        <Nav.Link as={Link} to="/ingredients">
+        <Nav.Link
+          as={Link}
+          to={{ pathname: "/ingredients", state: ingredients }}
+        >
           Create a Recipe!
         </Nav.Link>
       </Nav>
