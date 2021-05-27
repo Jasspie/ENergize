@@ -8,14 +8,13 @@ import IngredientModal from "./IngredientModal";
 import { useRecipe } from "../../contexts/RecipeContext";
 import { useHistory } from "react-router-dom";
 
-export default function CreateRecipe(props) {
-  console.log(props.location.state);
+export default function CreateRecipe() {
   const width = useWindowSize();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("Filter by Group...");
   const [details, setDetails] = useState(null);
   const [data, setData] = useState({});
-  const { ingredientsList } = useRecipe();
+  const { ingredientsList, scores } = useRecipe();
   let history = useHistory();
 
   function getSentiment(object, type) {
@@ -42,22 +41,6 @@ export default function CreateRecipe(props) {
     return temp;
   }
 
-  useEffect(() => {
-    const arr = ingredients["data"];
-    const newData = {};
-    arr.forEach((ingredient) => {
-      const name = `${ingredient["name"][0]}`;
-      newData[name] = {};
-      newData[name]["nutrition"] = {};
-      newData[name]["environment"] = {};
-      newData[name]["name"] = name;
-      newData[name]["categories"] = ingredient["categories"][0];
-      newData[name]["nutrition"] = getSentiment(ingredient, "nutrition");
-      newData[name]["environment"] = getSentiment(ingredient, "environment");
-    });
-    setData((e) => (e = newData));
-  }, []);
-
   function getCards() {
     var cards = [];
     var keys = Object.keys(data);
@@ -81,8 +64,29 @@ export default function CreateRecipe(props) {
         }
       });
       return cards;
-    } else return null;
+    }
   }
+
+  useEffect(() => {
+    console.log(ingredientsList);
+    // console.log(scores);
+  }, [ingredientsList, scores]);
+
+  useEffect(() => {
+    const arr = ingredients["data"];
+    const newData = {};
+    arr.forEach((ingredient) => {
+      const name = `${ingredient["name"][0]}`;
+      newData[name] = {};
+      newData[name]["nutrition"] = {};
+      newData[name]["environment"] = {};
+      newData[name]["name"] = name;
+      newData[name]["categories"] = ingredient["categories"][0];
+      newData[name]["nutrition"] = getSentiment(ingredient, "nutrition");
+      newData[name]["environment"] = getSentiment(ingredient, "environment");
+    });
+    setData((e) => (e = newData));
+  }, []);
 
   return (
     <div style={{ backgroundColor: "#f2fcff" }}>

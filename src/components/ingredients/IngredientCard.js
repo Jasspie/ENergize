@@ -6,7 +6,9 @@ import useWindowSize from "../../hooks/useWindowSize";
 import { useRecipe } from "../../contexts/RecipeContext";
 
 export default function IngredientCard({ ingredient, setDetails, details }) {
-  const { ingredientsList, setIngredientsList } = useRecipe();
+  const { ingredientsList, setIngredientsList, setScores, scores } =
+    useRecipe();
+
   const width = useWindowSize();
   const name = ingredient["name"];
   const category = ingredient["categories"];
@@ -20,7 +22,7 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
 
   function fontSize(string) {
     var temp = string.length;
-    var size = -4.5 * temp + 73.33;
+    var size = -4.5 * temp + 70;
     if (temp < 8) return 35;
     if (size > 25) return size;
     else return 25;
@@ -37,6 +39,18 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
     if (details) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "unset";
   }, [details]);
+
+  function updateList() {
+    setScores({ ...scores, [name]: score });
+    if (listStatus())
+      setIngredientsList(ingredientsList.filter((item) => item !== name));
+    else setIngredientsList((list) => [...list, name]);
+  }
+
+  function listStatus() {
+    if (ingredientsList.includes(name)) return true;
+    else return false;
+  }
 
   return (
     <Card className="shadow bg-white rounded">
@@ -56,7 +70,7 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
             </Card.Title>
             <Card.Subtitle
               style={{
-                fontSize: width === "lg" ? "25px" : "9vw",
+                fontSize: width === "lg" ? "20px" : "9vw",
                 marginBottom: width === "lg" ? "25px" : "60px",
               }}
             >
@@ -69,43 +83,21 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
                 marginBottom: width === "lg" ? "25px" : "30px",
                 padding: width === "lg" ? "10px" : "40px",
               }}
-              onClick={() => {
-                setDetails(name);
-              }}
+              onClick={() => setDetails(name)}
             >
               <ViewList /> View Details
             </Button>
-            {ingredientsList.includes(ingredient) ? (
-              <Button
-                variant="outline-danger"
-                style={{
-                  fontSize: width === "lg" ? "25px" : "7.5vw",
-                  marginBottom: width === "lg" ? "25px" : "30px",
-                  padding: width === "lg" ? "10px" : "40px",
-                }}
-                onClick={() => {
-                  setIngredientsList(
-                    ingredientsList.filter((item) => item !== ingredient)
-                  );
-                }}
-              >
-                <Cart2 /> Remove
-              </Button>
-            ) : (
-              <Button
-                variant="outline-success"
-                style={{
-                  fontSize: width === "lg" ? "25px" : "7.5vw",
-                  marginBottom: width === "lg" ? "25px" : "30px",
-                  padding: width === "lg" ? "10px" : "40px",
-                }}
-                onClick={() => {
-                  setIngredientsList((list) => [...list, ingredient]);
-                }}
-              >
-                <Cart2 /> Add
-              </Button>
-            )}
+            <Button
+              variant={listStatus() ? "outline-danger" : "outline-success"}
+              style={{
+                fontSize: width === "lg" ? "25px" : "7.5vw",
+                marginBottom: width === "lg" ? "25px" : "30px",
+                padding: width === "lg" ? "10px" : "40px",
+              }}
+              onClick={updateList}
+            >
+              <Cart2 /> {listStatus() ? "Remove" : " Add"}
+            </Button>
           </Card.Body>
         </Col>
       </Row>

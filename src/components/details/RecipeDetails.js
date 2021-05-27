@@ -1,19 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Alert, Button } from "react-bootstrap";
-import { Upload } from "react-bootstrap-icons";
+import { Upload, Trash } from "react-bootstrap-icons";
 import Navigation from "../Navigation";
 import useWindowSize from "../../hooks/useWindowSize";
 import { useHistory } from "react-router-dom";
 import { useRecipe } from "../../contexts/RecipeContext";
+import Search from "./Search";
 
-export default function RecipeDetails() {
+export default function RecipeDetails(data) {
   const width = useWindowSize();
   const [validate, setValidate] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
   const types = ["image/png", "image/jpeg", "image/jpg"];
   let history = useHistory();
-  const { setDetails, details, setTitle, title } = useRecipe();
+
+  const {
+    setDetails,
+    details,
+    setTitle,
+    title,
+    setIngredientsList,
+    ingredientsList,
+  } = useRecipe();
+
+  useEffect(() => {
+    if (ingredientsList.length === 0) {
+      history.push("/ingredients");
+    }
+  }, [ingredientsList, history]);
 
   function imgUpload(event) {
     let selected = event.target.files[0];
@@ -29,6 +45,46 @@ export default function RecipeDetails() {
   function handleSubmit() {
     // history.push("/overview")
     setValidate(true);
+  }
+
+  function list() {
+    var buttons = [];
+    ingredientsList.forEach((ingredient) => {
+      buttons.push(
+        <Button
+          key={ingredient}
+          variant="outline-danger"
+          style={{
+            padding: "5px",
+            paddingLeft: "15px",
+            paddingRight: "15px",
+            fontSize: "22px",
+            marginRight: "10px",
+            marginBottom: "10px",
+          }}
+          onClick={() =>
+            setIngredientsList(
+              ingredientsList.filter((item) => item !== ingredient)
+            )
+          }
+        >
+          <Trash /> {ingredient}
+        </Button>
+      );
+    });
+    return buttons;
+  }
+
+  async function onSearchSubmit(event) {
+    event.preventDefault();
+    const response = await Search.get("search/photos", {
+      baseURL: "https://api.unsplash.com",
+      headers: {
+        Authorization: "Client-ID " + process.env.REACT_APP_UNSPLASH_API_KEY,
+      },
+      params: { query: searchTerm },
+    });
+    console.log(response.data.results);
   }
 
   return (
@@ -71,18 +127,12 @@ export default function RecipeDetails() {
                 placeholder="Give your recipe a name!"
                 isInvalid={validate && title.length === 0}
                 onChange={(event) => setTitle(event.target.value)}
+                value={title}
               />
             </Col>
             <Col lg={12} style={{ paddingBottom: "20px" }}>
               <h3 style={{ color: "#7C7C7D" }}>Ingredient List</h3>
-              <Form.Control
-                as="textarea"
-                rows={10}
-                className="shadow-sm bg-white rounded"
-                size="lg"
-                type="text"
-                placeholder=""
-              />
+              {list()}
             </Col>
             <Col lg={12} style={{ paddingBottom: "20px" }}>
               <h3 style={{ color: "#7C7C7D" }}>Details</h3>
@@ -95,6 +145,7 @@ export default function RecipeDetails() {
                 placeholder="Recipe description, additional ingredients, instructions for preparation, etc."
                 isInvalid={validate && details.length === 0}
                 onChange={(event) => setDetails(event.target.value)}
+                value={details}
               />
             </Col>
           </Col>
@@ -131,12 +182,16 @@ export default function RecipeDetails() {
               )}
             </Row>
             <Row style={{ marginTop: "15px" }}>
-              <Form.Control
-                className="shadow-sm bg-white rounded"
-                size="lg"
-                type="text"
-                placeholder="Search for a photo..."
-              />
+              <form onSubmit={onSearchSubmit} style={{ width: "100%" }}>
+                <Form.Control
+                  className="shadow-sm bg-white rounded"
+                  size="lg"
+                  type="text"
+                  placeholder="Search for a photo..."
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  value={searchTerm}
+                />
+              </form>
             </Row>
             {/* <Row>{file && <img src={file} alt="File Upload" />}</Row> */}
           </Col>

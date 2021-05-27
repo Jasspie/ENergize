@@ -8,9 +8,10 @@ export function useRecipe() {
 
 export function RecipeProvider({ children }) {
   const [ingredientsList, setIngredientsList] = useState([]);
-  const [image, setImage] = useState(null);
+  const [scores, setScores] = useState({});
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
+  const [image, setImage] = useState(null);
 
   function reset() {
     setIngredientsList([]);
@@ -18,15 +19,18 @@ export function RecipeProvider({ children }) {
     setTitle("");
     setDetails("");
   }
+
   const value = {
     ingredientsList,
     image,
     title,
     details,
+    scores,
     reset,
     setIngredientsList,
     setDetails,
     setTitle,
+    setScores,
   };
 
   return (
