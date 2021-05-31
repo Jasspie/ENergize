@@ -6,30 +6,43 @@ import useWindowSize from "../../hooks/useWindowSize";
 import { useHistory } from "react-router-dom";
 import { useRecipe } from "../../contexts/RecipeContext";
 import Search from "./Search";
+import SearchCard from "./SearchCard";
 
-export default function RecipeDetails(data) {
+export default function RecipeDetails() {
   const width = useWindowSize();
-  const [validate, setValidate] = useState(false);
+  const [validity, setValidity] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [file, setFile] = useState(null);
+  const [search, setSearch] = useState(null);
+  const [searchTitle, setSearchTitle] = useState("No Photo Selected.");
   const [error, setError] = useState(null);
   const types = ["image/png", "image/jpeg", "image/jpg"];
-  let history = useHistory();
 
+  let history = useHistory();
   const {
     setDetails,
     details,
     setTitle,
     title,
+    scores,
     setIngredientsList,
     ingredientsList,
+    reset,
   } = useRecipe();
 
   useEffect(() => {
     if (ingredientsList.length === 0) {
+      reset();
       history.push("/ingredients");
     }
-  }, [ingredientsList, history]);
+  }, [ingredientsList, history, reset]);
+
+  useEffect(() => {
+    if (title.length === 0 || details.length === 0 || file === null)
+      setValidity(false);
+    else setValidity(true);
+  }, [title, details, file]);
 
   function imgUpload(event) {
     let selected = event.target.files[0];
@@ -43,8 +56,13 @@ export default function RecipeDetails(data) {
   }
 
   function handleSubmit() {
-    // history.push("/overview")
-    setValidate(true);
+    let score = 0;
+    ingredientsList.forEach((ingredient) => {
+      score += scores[`${ingredient}`];
+    });
+    const average = Math.floor(score / ingredientsList.length);
+    console.log(average);
+    setSubmit(true);
   }
 
   function list() {
@@ -84,7 +102,10 @@ export default function RecipeDetails(data) {
       },
       params: { query: searchTerm },
     });
-    console.log(response.data.results);
+    const results = response.data.results;
+    console.log(results);
+    setError(null);
+    setSearch(results);
   }
 
   return (
@@ -125,7 +146,7 @@ export default function RecipeDetails(data) {
                 size="lg"
                 type="text"
                 placeholder="Give your recipe a name!"
-                isInvalid={validate && title.length === 0}
+                isInvalid={submit && !validity}
                 onChange={(event) => setTitle(event.target.value)}
                 value={title}
               />
@@ -143,7 +164,7 @@ export default function RecipeDetails(data) {
                 size="lg"
                 type="text"
                 placeholder="Recipe description, additional ingredients, instructions for preparation, etc."
-                isInvalid={validate && details.length === 0}
+                isInvalid={submit && !validity}
                 onChange={(event) => setDetails(event.target.value)}
                 value={details}
               />
@@ -158,8 +179,6 @@ export default function RecipeDetails(data) {
                 className="btn btn-outline-success"
                 style={{
                   padding: "5px",
-                  paddingLeft: "15px",
-                  paddingRight: "15px",
                   fontSize: "22px",
                 }}
               >
@@ -181,7 +200,20 @@ export default function RecipeDetails(data) {
                 </Alert>
               )}
             </Row>
-            <Row style={{ marginTop: "15px" }}>
+            <Row>
+              {searchTitle && (
+                <label
+                  style={{
+                    padding: "5px",
+                    fontSize: "22px",
+                    color: submit && !validity ? "#DC3545" : "#7C7C7D",
+                  }}
+                >
+                  {searchTitle}
+                </label>
+              )}
+            </Row>
+            <Row>
               <form onSubmit={onSearchSubmit} style={{ width: "100%" }}>
                 <Form.Control
                   className="shadow-sm bg-white rounded"
@@ -193,7 +225,13 @@ export default function RecipeDetails(data) {
                 />
               </form>
             </Row>
-            {/* <Row>{file && <img src={file} alt="File Upload" />}</Row> */}
+            {search && (
+              <SearchCard
+                search={search}
+                setSearchTitle={setSearchTitle}
+                setFile={setFile}
+              />
+            )}
           </Col>
         </Row>
       </Container>

@@ -18,6 +18,7 @@ export function RecipeProvider({ children }) {
     setImage(null);
     setTitle("");
     setDetails("");
+    setScores({});
   }
 
   const value = {

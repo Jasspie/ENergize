@@ -69,7 +69,7 @@ export default function CreateRecipe() {
 
   useEffect(() => {
     console.log(ingredientsList);
-    // console.log(scores);
+    console.log(scores);
   }, [ingredientsList, scores]);
 
   useEffect(() => {
