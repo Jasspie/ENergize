@@ -1,4 +1,6 @@
 import React, { useContext, useState } from "react";
+import { database } from "../firebase";
+import { useAuth } from "./AuthContext";
 
 const RecipeContext = React.createContext();
 
@@ -12,6 +14,7 @@ export function RecipeProvider({ children }) {
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
   const [image, setImage] = useState(null);
+  const { currentUser } = useAuth();
 
   function reset() {
     setIngredientsList([]);
@@ -19,6 +22,18 @@ export function RecipeProvider({ children }) {
     setTitle("");
     setDetails("");
     setScores({});
+  }
+
+  function submitRecipe(average, photo) {
+    database.recipes.add({
+      average,
+      title,
+      ingredientsList,
+      details,
+      photo,
+      userId: currentUser.uid,
+      ceatedAt: database.getCurrentTimeStamp(),
+    });
   }
 
   const value = {
@@ -32,6 +47,7 @@ export function RecipeProvider({ children }) {
     setDetails,
     setTitle,
     setScores,
+    submitRecipe,
   };
 
   return (

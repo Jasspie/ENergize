@@ -67,10 +67,10 @@ export default function CreateRecipe() {
     }
   }
 
-  useEffect(() => {
-    console.log(ingredientsList);
-    console.log(scores);
-  }, [ingredientsList, scores]);
+  // useEffect(() => {
+  //   console.log(ingredientsList);
+  //   console.log(scores);
+  // }, [ingredientsList, scores]);
 
   useEffect(() => {
     const arr = ingredients["data"];

@@ -5,6 +5,8 @@ import Navigation from "../Navigation";
 import useWindowSize from "../../hooks/useWindowSize";
 import { useHistory } from "react-router-dom";
 import { useRecipe } from "../../contexts/RecipeContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { storage } from "../../firebase";
 import Search from "./Search";
 import SearchCard from "./SearchCard";
 
@@ -25,11 +27,13 @@ export default function RecipeDetails() {
     details,
     setTitle,
     title,
-    scores,
     setIngredientsList,
     ingredientsList,
     reset,
+    scores,
+    submitRecipe,
   } = useRecipe();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     if (ingredientsList.length === 0) {
@@ -44,11 +48,34 @@ export default function RecipeDetails() {
     else setValidity(true);
   }, [title, details, file]);
 
-  function imgUpload(event) {
+  async function imgUpload(event) {
     let selected = event.target.files[0];
+    console.log(selected);
     if (selected && types.includes(selected.type)) {
       setError(null);
-      setFile(selected);
+      const path = `recipes/${currentUser.uid}/${selected.name}`;
+      const ref = storage.ref(path);
+      try {
+        await ref.getDownloadURL().then((url) => {
+          console.log(url);
+          setFile(url);
+          setSearchTitle(selected.name);
+        });
+      } catch (err) {
+        const uploadTask = storage.ref(path).put(selected);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {},
+          () => {},
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+              console.log(url);
+              setFile(url);
+              setSearchTitle(selected.name);
+            });
+          }
+        );
+      }
     } else if (selected === null) {
       setFile(null);
       setError("Select a valid image file");
@@ -63,6 +90,8 @@ export default function RecipeDetails() {
     const average = Math.floor(score / ingredientsList.length);
     console.log(average);
     setSubmit(true);
+    submitRecipe(average, file);
+    if (validity) console.log("valid");
   }
 
   function list() {
@@ -146,7 +175,7 @@ export default function RecipeDetails() {
                 size="lg"
                 type="text"
                 placeholder="Give your recipe a name!"
-                isInvalid={submit && !validity}
+                isInvalid={submit && title.length === 0}
                 onChange={(event) => setTitle(event.target.value)}
                 value={title}
               />
@@ -164,7 +193,7 @@ export default function RecipeDetails() {
                 size="lg"
                 type="text"
                 placeholder="Recipe description, additional ingredients, instructions for preparation, etc."
-                isInvalid={submit && !validity}
+                isInvalid={submit && details.length === 0}
                 onChange={(event) => setDetails(event.target.value)}
                 value={details}
               />
@@ -206,7 +235,7 @@ export default function RecipeDetails() {
                   style={{
                     padding: "5px",
                     fontSize: "22px",
-                    color: submit && !validity ? "#DC3545" : "#7C7C7D",
+                    color: submit && !file ? "#DC3545" : "#7C7C7D",
                   }}
                 >
                   {searchTitle}

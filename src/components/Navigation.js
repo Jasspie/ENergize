@@ -7,7 +7,7 @@ import { Link, useHistory } from "react-router-dom";
 export default function Navigation() {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
-  const { ingredients } = useRecipe();
+  const { ingredients, reset } = useRecipe();
   const history = useHistory();
 
   async function handleLogout() {
@@ -22,7 +22,7 @@ export default function Navigation() {
 
   return (
     <Navbar fixed="top" bg="light" style={{ position: "sticky" }}>
-      <Navbar.Brand as={Link} to="/">
+      <Navbar.Brand as={Link} to="/" onClick={reset}>
         ENergize
       </Navbar.Brand>
       <Nav>
