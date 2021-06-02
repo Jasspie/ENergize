@@ -12,7 +12,7 @@ export default function SignIn() {
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     ],
-    signInSuccessUrl: "/",
+    signInSuccessUrl: process.env.PUBLIC_URL,
   };
   return (
     <Container
