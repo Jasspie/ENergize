@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { database } from "../../firebase";
 import Navigation from "../Navigation";
 import Pie from "../Pie";
@@ -11,15 +11,22 @@ export default function RecipeInfo() {
   const width = useWindowSize();
   const recipe = useParams();
   const [recipeData, setRecipeData] = useState({});
+  let history = useHistory();
 
   useEffect(() => {
-    database.recipes
-      .doc(recipe.id)
-      .get()
-      .then((existingRecipes) => {
-        // console.log(database.formatDoc(existingRecipes));
-        setRecipeData(database.formatDoc(existingRecipes));
-      });
+    async function fetchRecipes() {
+      await database.recipes
+        .doc(recipe.id)
+        .get()
+        .then((existingRecipes) => {
+          // console.log(database.formatDoc(existingRecipes));
+          setRecipeData(database.formatDoc(existingRecipes));
+        });
+    }
+    fetchRecipes();
+    return () => {
+      setRecipeData({});
+    };
   }, [recipe]);
 
   function getIngredients() {
@@ -41,6 +48,11 @@ export default function RecipeInfo() {
       });
       return ingredients;
     }
+  }
+
+  async function deleteRecipe() {
+    await database.recipes.doc(recipe.id).delete();
+    history.push("/");
   }
 
   return (
@@ -127,7 +139,7 @@ export default function RecipeInfo() {
                   <Button
                     variant="outline-danger"
                     style={{ fontSize: "25px" }}
-                    // onClick={() => history.push("/overview")}
+                    onClick={deleteRecipe}
                   >
                     <Trash /> Delete Recipe
                   </Button>

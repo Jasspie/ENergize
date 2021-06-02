@@ -58,8 +58,9 @@ export default function RecipeDetails() {
       try {
         await ref.getDownloadURL().then((url) => {
           // console.log(url);
+          const title = "Image: " + selected.name;
           setFile(url);
-          setSearchTitle(selected.name);
+          setSearchTitle(title);
         });
       } catch (err) {
         const uploadTask = storage.ref(path).put(selected);
@@ -90,7 +91,10 @@ export default function RecipeDetails() {
     const average = Math.floor(score / ingredientsList.length);
     // console.log(average);
     setSubmit(true);
-    if (validity) submitRecipe(average, file);
+    if (validity) {
+      submitRecipe(average, file);
+      history.push("/");
+    }
   }
 
   function list() {
