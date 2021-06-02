@@ -1,6 +1,6 @@
 {
   "homepage": "https://jasspie.github.io/ENergize/",
-  "name": "firebase-react-auth",
+  "name": "proj1",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -b master -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

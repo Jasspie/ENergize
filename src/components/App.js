@@ -1,7 +1,7 @@
 import React from "react";
 import { AuthProvider } from "../contexts/AuthContext";
 import { RecipeProvider } from "../contexts/RecipeContext";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import Recipes from "./main/Recipes";
 import SignIn from "./SignIn";
@@ -11,7 +11,7 @@ import RecipeInfo from "./main/RecipeInfo";
 
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <AuthProvider>
         <RecipeProvider>
           <Switch>
