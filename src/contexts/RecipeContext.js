@@ -32,7 +32,7 @@ export function RecipeProvider({ children }) {
       details,
       photo,
       userId: currentUser.uid,
-      ceatedAt: database.getCurrentTimeStamp(),
+      createdAt: database.getCurrentTimeStamp(),
     });
   }
 

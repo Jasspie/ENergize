@@ -17,6 +17,9 @@ const firestore = app.firestore();
 export const database = {
   recipes: firestore.collection("recipes"),
   getCurrentTimeStamp: firebase.firestore.FieldValue.serverTimestamp,
+  formatDoc: (doc) => {
+    return { id: doc.id, ...doc.data() };
+  },
 };
 export const storage = app.storage();
 export const auth = app.auth();

@@ -18,7 +18,7 @@ export default function Pie({ score }) {
       },
     },
     cutout: "80%",
-    animation: false,
+    animation: true,
   };
 
   const data = {
@@ -52,7 +52,7 @@ export default function Pie({ score }) {
       <h6
         style={{
           position: "absolute",
-          fontSize: width === "lg" ? "60px" : "30vw",
+          fontSize: width === "lg" ? "60px" : "25vw",
           color: getColour(score),
         }}
       >

@@ -1,34 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "react-bootstrap";
-import Pie from "../Pie";
+import { useHistory } from "react-router-dom";
 import useWindowSize from "../../hooks/useWindowSize";
-import Temp from "../Temp.jpg";
 
-export default function RecipeCard() {
+export default function RecipeCard({ recipe }) {
+  const [isShown, setIsShown] = useState(false);
   const width = useWindowSize();
-
-  const score = Math.floor(Math.random() * 100);
+  let history = useHistory();
 
   return (
-    <Card>
-      <Card.Img
-        variant="top"
-        src={Temp}
-        style={{
-          width: "auto",
-          height: width === "lg" ? "250px" : "375px",
-          objectFit: "cover",
-        }}
-      />
+    <Card
+      className="shadow bg-white rounded "
+      onClick={() => {
+        history.push(`/recipes/${recipe.id}`);
+      }}
+      style={{
+        transform: isShown ? "scale(1.05)" : "",
+        transition: ".3s transform cubic-bezier(.155,1.105,.295,1.12)",
+        cursor: "pointer",
+      }}
+      onMouseEnter={() => setIsShown(true)}
+      onMouseLeave={() => setIsShown(false)}
+    >
       <Card.Body>
         <Card.Title
           className="text-center"
           style={{ fontSize: width === "lg" ? "30px" : "7vw" }}
         >
-          Stir Fry
+          {recipe.title}
         </Card.Title>
-        <Pie score={score} />
       </Card.Body>
+      <Card.Img
+        variant="top"
+        src={recipe.photo}
+        style={{
+          width: "auto",
+          height: width === "lg" ? "325px" : "375px",
+          objectFit: "cover",
+        }}
+      />
     </Card>
   );
 }

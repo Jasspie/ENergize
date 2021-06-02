@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Row, Col } from "react-bootstrap";
 import { Cart2, ViewList } from "react-bootstrap-icons";
 import Pie from "../Pie";
@@ -8,7 +8,7 @@ import { useRecipe } from "../../contexts/RecipeContext";
 export default function IngredientCard({ ingredient, setDetails, details }) {
   const { ingredientsList, setIngredientsList, setScores, scores } =
     useRecipe();
-
+  const [isShown, setIsShown] = useState(false);
   const width = useWindowSize();
   const name = ingredient["name"];
   const category = ingredient["categories"];
@@ -53,7 +53,15 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
   }
 
   return (
-    <Card className="shadow bg-white rounded">
+    <Card
+      className="shadow bg-white rounded"
+      style={{
+        transform: isShown ? "scale(1.05)" : "",
+        transition: ".3s transform cubic-bezier(.155,1.105,.295,1.12)",
+      }}
+      onMouseEnter={() => setIsShown(true)}
+      onMouseLeave={() => setIsShown(false)}
+    >
       <Row className="align-items-center">
         <Col lg={6} style={{ padding: width === "lg" ? "25px" : "35px" }}>
           <Pie score={score} />

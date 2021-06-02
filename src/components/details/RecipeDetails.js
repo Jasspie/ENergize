@@ -50,14 +50,14 @@ export default function RecipeDetails() {
 
   async function imgUpload(event) {
     let selected = event.target.files[0];
-    console.log(selected);
+    // console.log(selected);
     if (selected && types.includes(selected.type)) {
       setError(null);
       const path = `recipes/${currentUser.uid}/${selected.name}`;
       const ref = storage.ref(path);
       try {
         await ref.getDownloadURL().then((url) => {
-          console.log(url);
+          // console.log(url);
           setFile(url);
           setSearchTitle(selected.name);
         });
@@ -69,7 +69,7 @@ export default function RecipeDetails() {
           () => {},
           () => {
             uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-              console.log(url);
+              // console.log(url);
               setFile(url);
               setSearchTitle(selected.name);
             });
@@ -88,10 +88,9 @@ export default function RecipeDetails() {
       score += scores[`${ingredient}`];
     });
     const average = Math.floor(score / ingredientsList.length);
-    console.log(average);
+    // console.log(average);
     setSubmit(true);
-    submitRecipe(average, file);
-    if (validity) console.log("valid");
+    if (validity) submitRecipe(average, file);
   }
 
   function list() {
