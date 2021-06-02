@@ -94,6 +94,7 @@ export default function RecipeDetails() {
     if (validity) {
       submitRecipe(average, file);
       history.push("/");
+      reset();
     }
   }
 

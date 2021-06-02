@@ -11,7 +11,7 @@ import RecipeInfo from "./main/RecipeInfo";
 
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <AuthProvider>
         <RecipeProvider>
           <Switch>
