@@ -53,6 +53,7 @@ export default function RecipeDetails() {
     // console.log(selected);
     if (selected && types.includes(selected.type)) {
       setError(null);
+      setValidity(false);
       const path = `recipes/${currentUser.uid}/${selected.name}`;
       const ref = storage.ref(path);
       try {

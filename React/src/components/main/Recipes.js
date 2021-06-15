@@ -9,6 +9,7 @@ import useWindowSize from "../../hooks/useWindowSize";
 export default function Recipes() {
   const { currentUser } = useAuth();
   const [recipes, setRecipes] = useState([]);
+  const [helper, setHelper] = useState(false);
   const width = useWindowSize();
 
   useEffect(() => {
@@ -19,8 +20,9 @@ export default function Recipes() {
         .orderBy("createdAt")
         .onSnapshot((snapshot) => {
           if (isMounted) {
-            setRecipes(snapshot.docs.map(database.formatDoc));
-            // console.log(snapshot.docs.map(database.formatDoc));
+            const data = snapshot.docs.map(database.formatDoc);
+            data.length === 0 ? setHelper(true) : setRecipes(data);
+            console.log(data);
           }
         });
     }
@@ -38,7 +40,7 @@ export default function Recipes() {
     <div style={{ backgroundColor: "#f2fcff" }}>
       <Navigation />
       <Container>
-        {recipes.length === 0 && (
+        {helper && (
           <div style={{ textAlign: "center" }}>
             <h6
               style={{
@@ -46,11 +48,22 @@ export default function Recipes() {
                 marginTop: "30px",
               }}
             >
-              Your list of recipes is empty,
+              Welcome to ENergize!
             </h6>
             <h3 style={{ color: "#7C7C7D" }}>
-              Click on "Create a Recipe!" to get started
+              ENergize allows you to create recipes and view <br />
+              the health benefits and environmental impact <br />
+              for each of your ingredients.
+              <br />
             </h3>
+            <h6
+              style={{
+                fontSize: width === "lg" ? "40px" : "60px",
+                marginTop: "10px",
+              }}
+            >
+              Check Out "Create a Recipe!"
+            </h6>
           </div>
         )}
         <Row
