@@ -2,12 +2,12 @@ import React from "react";
 import { auth } from "../firebase";
 import { StyledFirebaseAuth } from "react-firebaseui";
 import { Container } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
 import firebase from "firebase";
 import Logo from "./Logo.png";
+import useWindowSize from "../hooks/useWindowSize";
 
 export default function SignIn() {
-  let history = useHistory();
+  const width = useWindowSize();
   const uiConfig = {
     signInFlow: "redirect",
     signInOptions: [
@@ -22,7 +22,14 @@ export default function SignIn() {
       style={{ minHeight: "100vh" }}
     >
       <div>
-        <img src={Logo} alt="Energize Logo" style={{ paddingBottom: "15px" }} />
+        <img
+          src={Logo}
+          alt="Energize Logo"
+          style={{
+            paddingBottom: width === "lg" ? "15px" : "0px",
+            transform: width === "lg" ? "scale(0.9)" : "scale(0.6)",
+          }}
+        />
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
       </div>
     </Container>
