@@ -17,9 +17,11 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
       0.6 * ingredient["nutrition"]["nutrition_avg"]
   );
 
+  // Sets score to zero if it is invalid, and 100 if it exceeds that value
   if (Number.isNaN(score)) score = 0;
   if (score > 100) score = 100;
 
+  // Calculates fontsize for headers
   function fontSize(string) {
     var temp = string.length;
     var size = -4.5 * temp + 70;
@@ -40,6 +42,7 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
     else document.body.style.overflow = "unset";
   }, [details]);
 
+  // Updates the ingredients list based on user input
   function updateList() {
     setScores({ ...scores, [name]: score });
     if (listStatus())
@@ -47,6 +50,7 @@ export default function IngredientCard({ ingredient, setDetails, details }) {
     else setIngredientsList((list) => [...list, name]);
   }
 
+  // Handles whether the add or remove button should be displayed
   function listStatus() {
     if (ingredientsList.includes(name)) return true;
     else return false;

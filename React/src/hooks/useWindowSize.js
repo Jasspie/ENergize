@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+// Custom Hook handles responsive design by updating the width property whenever the window is resized
 function getBreakPoint(windowWidth) {
   if (windowWidth) {
     if (windowWidth < 992) return "sm";

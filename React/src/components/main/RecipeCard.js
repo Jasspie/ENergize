@@ -3,6 +3,7 @@ import { Card } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import useWindowSize from "../../hooks/useWindowSize";
 
+// Component that displays each of the user's recipes as a card on the home page
 export default function RecipeCard({ recipe }) {
   const [isShown, setIsShown] = useState(false);
   const width = useWindowSize();

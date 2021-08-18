@@ -2,6 +2,7 @@ import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import useWindowSize from "../hooks/useWindowSize";
 
+// Creates a donut pie chart and colors it based on its score
 export default function Pie({ score }) {
   const width = useWindowSize();
 

@@ -7,12 +7,14 @@ import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import useWindowSize from "../../hooks/useWindowSize";
 
+// Component which displays details for a user's recipe after clicking it from the home page
 export default function RecipeInfo() {
   const width = useWindowSize();
   const recipe = useParams();
   const [recipeData, setRecipeData] = useState({});
   let history = useHistory();
 
+  // Hook which fetches recipe information from the Firestore Database
   useEffect(() => {
     async function fetchRecipes() {
       await database.recipes
@@ -55,6 +57,7 @@ export default function RecipeInfo() {
     history.push("/");
   }
 
+  // Future step: Can implement an edit recipe optionality
   return (
     <div style={{ backgroundColor: "#f2fcff" }}>
       <Navigation />

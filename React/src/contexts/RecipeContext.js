@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { database } from "../firebase";
 import { useAuth } from "./AuthContext";
 
+// Context handles the recipe that the user is currently building when navigating between pages
 const RecipeContext = React.createContext();
 
 export function useRecipe() {

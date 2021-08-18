@@ -12,6 +12,7 @@ export default function Recipes() {
   const [helper, setHelper] = useState(false);
   const width = useWindowSize();
 
+  // Hook which retrieves user recipes whenever the page is rendered
   useEffect(() => {
     let isMounted = true;
     function fetchRecipes() {

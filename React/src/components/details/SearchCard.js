@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Row, Col } from "react-bootstrap";
 
+// Renders the image search from the Unsplash API as two columns of cards
 export default function SearchCard({ search, setSearchTitle, setFile }) {
   function getCards(a, b) {
     const cards = search.slice(a, b).map((card) => {
