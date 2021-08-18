@@ -14,9 +14,11 @@ export default function CreateRecipe() {
   const [filter, setFilter] = useState("Filter by Group...");
   const [details, setDetails] = useState(null);
   const [data, setData] = useState({});
-  const { ingredientsList, scores } = useRecipe();
+  const { ingredientsList } = useRecipe();
   let history = useHistory();
 
+  // Function computes the average environmental/nutritional sentiment and calls setData
+  // Handles all the data from the ingredients json file
   function getSentiment(object, type) {
     var count = 0;
     var total = 0;
@@ -41,9 +43,11 @@ export default function CreateRecipe() {
     return temp;
   }
 
+  // Renders each card as an ingredient for the user to select after computing scores
   function getCards() {
     var cards = [];
     var keys = Object.keys(data);
+    // Condition that allows user to filter ingredients by categories or search for them
     if (keys !== 0) {
       keys.forEach((ingredient) => {
         if (
@@ -72,6 +76,7 @@ export default function CreateRecipe() {
   //   console.log(scores);
   // }, [ingredientsList, scores]);
 
+  // Hook that updates data after retrieving the information for each ingredient
   useEffect(() => {
     const arr = ingredients["data"];
     const newData = {};

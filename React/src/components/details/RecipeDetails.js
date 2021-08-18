@@ -10,6 +10,7 @@ import { storage } from "../../firebase";
 import Search from "./Search";
 import SearchCard from "./SearchCard";
 
+// Component handles the recipe details and upload
 export default function RecipeDetails() {
   const width = useWindowSize();
   const [validity, setValidity] = useState(false);
@@ -35,6 +36,7 @@ export default function RecipeDetails() {
   } = useRecipe();
   const { currentUser } = useAuth();
 
+  // User is redirected to the ingredients page if the ingredients list is empty
   useEffect(() => {
     if (ingredientsList.length === 0) {
       reset();
@@ -42,18 +44,22 @@ export default function RecipeDetails() {
     }
   }, [ingredientsList, history, reset]);
 
+  // Hook checks whether all fields have been completed and recipe can be submitted
   useEffect(() => {
     if (title.length === 0 || details.length === 0 || file === null)
       setValidity(false);
     else setValidity(true);
   }, [title, details, file]);
 
+  // Handles image upload, uses Firebase Storage
   async function imgUpload(event) {
     let selected = event.target.files[0];
     // console.log(selected);
+    // Conditions checks whether uploaded file is a valid image
     if (selected && types.includes(selected.type)) {
       setError(null);
       setValidity(false);
+      // Path where images will be stored
       const path = `recipes/${currentUser.uid}/${selected.name}`;
       const ref = storage.ref(path);
       try {
@@ -78,12 +84,15 @@ export default function RecipeDetails() {
           }
         );
       }
-    } else if (selected === null) {
+    }
+    // Handles case where user does not upload a valid iamge file
+    else if (selected === null) {
       setFile(null);
       setError("Select a valid image file");
     }
   }
 
+  // Calculates the ENergize score when the user submits their recipe
   function handleSubmit() {
     let score = 0;
     ingredientsList.forEach((ingredient) => {
@@ -99,6 +108,7 @@ export default function RecipeDetails() {
     }
   }
 
+  // Renders all the user's ingredients as a list
   function list() {
     var buttons = [];
     ingredientsList.forEach((ingredient) => {
@@ -127,6 +137,7 @@ export default function RecipeDetails() {
     return buttons;
   }
 
+  // Function connects with the Unsplash API to find images for users
   async function onSearchSubmit(event) {
     event.preventDefault();
     const response = await Search.get("search/photos", {

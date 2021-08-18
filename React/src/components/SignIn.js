@@ -6,6 +6,7 @@ import firebase from "firebase";
 import Logo from "./Logo.png";
 import useWindowSize from "../hooks/useWindowSize";
 
+// Sign in component uses react-firebaseui for icons
 export default function SignIn() {
   const width = useWindowSize();
   const uiConfig = {

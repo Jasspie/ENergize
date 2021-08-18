@@ -2,15 +2,18 @@ import React from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import useWindowSize from "../../hooks/useWindowSize";
 
+// Modal which includes relevant links for each ignredient
 export default function IngredientModal({ setDetails, details }) {
   const width = useWindowSize();
 
+  // Allows user to hide the details modal if they click the background
   function click(event) {
     if (event.target.classList.contains("background")) {
       setDetails(null);
     }
   }
 
+  // Function which gets the colours for each ingredient score
   function getColour(number) {
     if (number > 90) return "#11b31e";
     else if (number > 84) return "#57a000";
@@ -28,6 +31,7 @@ export default function IngredientModal({ setDetails, details }) {
     else return score;
   }
 
+  // Displays the relevant articles and their links for each of the ingredients
   function getArticles(data, type) {
     var articles = [];
 
