@@ -22,7 +22,7 @@ export default function Recipes() {
           if (isMounted) {
             const data = snapshot.docs.map(database.formatDoc);
             data.length === 0 ? setHelper(true) : setRecipes(data);
-            console.log(data);
+            // console.log(data);
           }
         });
     }
@@ -50,7 +50,7 @@ export default function Recipes() {
             >
               Welcome to ENergize!
             </h6>
-            <h3 style={{ color: "#7C7C7D" }}>
+            <h3 style={{ color: "#7C7C7D" }} className="my-4">
               ENergize allows you to create recipes and view <br />
               the health benefits and environmental impact <br />
               for each of your ingredients.
