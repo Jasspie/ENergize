@@ -2,6 +2,7 @@ import pandas as pd
 import json
 import glob 
 
+# merge.py is used to combine all of the ingredient json files into a single json file
 master = {
     "data":[]
 }

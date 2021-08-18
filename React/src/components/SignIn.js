@@ -14,7 +14,7 @@ export default function SignIn() {
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     ],
-    signInSuccessUrl: "/ENergize",
+    signInSuccessUrl: "/",
   };
   return (
     <Container
